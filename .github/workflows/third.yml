@@ -1,0 +1,12 @@
+name: Real Dev CI Demo (Echo Only)
+
+on:
+  workflow_dispatch
+
+jobs:
+   ci-pipeline:
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Say Hello
+            run: echo "Hello from the third workflow!"

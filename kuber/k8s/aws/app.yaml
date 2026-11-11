@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+        - name: hello
+          image: rehanmallick/hello-python:latest
+          env:
+            - name: APP_MESSAGES
+              value: "Hello from app.yaml"
+            - name: DB_PASSWORD
+              value: "cGFzc3dvcmQ=" #base64 for 'password'
+          # env:
+          #   - name: ENV_VALUE
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: hello-config 
+          #         key: APP_MESSAGE
+
+          #   - name: DB_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: db-secret
+          #         key: DB_PASSWORD
+          ports:
+            - containerPort: 3000
+
+---
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: hello
+spec:
+  selector:
+    app: hello
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
